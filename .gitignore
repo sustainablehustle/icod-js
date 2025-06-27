@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Environment variables
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
+
+# GitHub Actions
+.github/workflows/*.log

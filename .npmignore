@@ -1,0 +1,31 @@
+# Test files
+test.js
+*.test.js
+*.spec.js
+
+# Development files
+.gitignore
+.editorconfig
+.eslintrc*
+
+# CI/CD
+.github/
+.travis.yml
+.circleci/
+
+# Documentation source
+docs/
+
+# Examples
+examples/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Source files
+src/
+
+# TypeScript config
+tsconfig.json
+*.tsbuildinfo
