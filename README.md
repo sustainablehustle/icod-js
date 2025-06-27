@@ -139,7 +139,7 @@ Requires browsers with Web Crypto API support:
 - Firefox 34+
 - Safari 11+
 - Edge 79+
-- Node.js 15+ (with crypto module)
+- Node.js 22+ (with crypto module)
 
 ## License
 
