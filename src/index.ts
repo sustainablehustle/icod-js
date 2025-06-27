@@ -13,6 +13,7 @@ import {
 import {
   isWebCryptoAvailable,
   ensureWebCrypto,
+  getWebCrypto,
   arrayBufferToBase64,
   base64ToArrayBuffer,
   stringToArrayBuffer,
@@ -33,7 +34,7 @@ import {
  * @returns The derived CryptoKey
  */
 async function deriveKey(passphrase: string, salt: ArrayBuffer): Promise<CryptoKey> {
-  ensureWebCrypto();
+  const crypto = getWebCrypto();
 
   const passphraseKey = await crypto.subtle.importKey(
     'raw',
@@ -63,6 +64,7 @@ async function deriveKey(passphrase: string, salt: ArrayBuffer): Promise<CryptoK
  * @returns Base64-encoded hash
  */
 async function computeKeyHash(key: CryptoKey): Promise<string> {
+  const crypto = getWebCrypto();
   // Export the key to raw format
   const rawKey = await crypto.subtle.exportKey('raw', key);
   // Hash the raw key
@@ -127,6 +129,7 @@ export async function encrypt(
     const plaintextBuffer = stringToArrayBuffer(plaintext);
 
     // Encrypt using AES-GCM
+    const crypto = getWebCrypto();
     const ciphertextBuffer = await crypto.subtle.encrypt(
       {
         name: 'AES-GCM',
@@ -211,6 +214,7 @@ export async function decrypt(
     // Decrypt using AES-GCM
     let plaintextBuffer: ArrayBuffer;
     try {
+      const crypto = getWebCrypto();
       plaintextBuffer = await crypto.subtle.decrypt(
         {
           name: 'AES-GCM',

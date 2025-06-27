@@ -7,14 +7,32 @@ export const IV_LENGTH = 12; // 96 bits for AES-GCM
 export const KEY_LENGTH = 32; // 256 bits
 export const CURRENT_VERSION = 1;
 
+// Get crypto object that works in both browser and Node.js
+declare const globalThis: any;
+
+/**
+ * Get the crypto object for the current environment
+ */
+function getCrypto(): Crypto | undefined {
+  if (typeof globalThis !== 'undefined' && globalThis.crypto) {
+    return globalThis.crypto;
+  }
+  if (typeof global !== 'undefined' && (global as any).crypto) {
+    return (global as any).crypto;
+  }
+  if (typeof window !== 'undefined' && window.crypto) {
+    return window.crypto;
+  }
+  return undefined;
+}
+
 /**
  * Check if the Web Crypto API is available in the current environment
  * @returns {boolean} True if Web Crypto API is available, false otherwise
  */
 export function isWebCryptoAvailable(): boolean {
-  return typeof globalThis !== 'undefined' && 
-         typeof globalThis.crypto !== 'undefined' && 
-         typeof globalThis.crypto.subtle !== 'undefined';
+  const cryptoObj = getCrypto();
+  return cryptoObj !== undefined && cryptoObj.subtle !== undefined;
 }
 
 /**
@@ -25,6 +43,14 @@ export function ensureWebCrypto(): void {
   if (!isWebCryptoAvailable()) {
     throw new CryptoAPIUnavailableError();
   }
+}
+
+/**
+ * Get the crypto object, ensuring it's available
+ */
+export function getWebCrypto(): Crypto {
+  ensureWebCrypto();
+  return getCrypto()!;
 }
 
 /**
@@ -71,7 +97,7 @@ export function arrayBufferToString(buffer: ArrayBuffer): string {
  * Generate cryptographically secure random bytes
  */
 export function generateRandomBytes(length: number): Uint8Array {
-  ensureWebCrypto();
+  const crypto = getWebCrypto();
   return crypto.getRandomValues(new Uint8Array(length));
 }
 
