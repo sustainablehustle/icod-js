@@ -130,12 +130,17 @@ export async function encrypt(
 
     // Encrypt using AES-GCM
     const crypto = getWebCrypto();
+    const algorithmParams: any = {
+      name: 'AES-GCM',
+      iv: iv
+    };
+    
+    if (options?.additionalData) {
+      algorithmParams.additionalData = options.additionalData;
+    }
+    
     const ciphertextBuffer = await crypto.subtle.encrypt(
-      {
-        name: 'AES-GCM',
-        iv: iv,
-        additionalData: options?.additionalData
-      },
+      algorithmParams,
       key,
       plaintextBuffer
     );
@@ -215,12 +220,17 @@ export async function decrypt(
     let plaintextBuffer: ArrayBuffer;
     try {
       const crypto = getWebCrypto();
+      const algorithmParams: any = {
+        name: 'AES-GCM',
+        iv: ivBuffer
+      };
+      
+      if (options?.additionalData) {
+        algorithmParams.additionalData = options.additionalData;
+      }
+      
       plaintextBuffer = await crypto.subtle.decrypt(
-        {
-          name: 'AES-GCM',
-          iv: ivBuffer,
-          additionalData: options?.additionalData
-        },
+        algorithmParams,
         key,
         ciphertextBuffer
       );
