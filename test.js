@@ -73,8 +73,8 @@ async function runTests() {
     console.assert(encrypted1.ciphertext !== encrypted2.ciphertext, 'Same passphrase with different salts should produce different ciphertexts');
   });
 
-  // Test 5: Wrong passphrase throws InvalidPassphraseError
-  await test('Wrong passphrase throws InvalidPassphraseError', async () => {
+  // Test 5: Wrong passphrase throws CorruptedDataError
+  await test('Wrong passphrase throws CorruptedDataError', async () => {
     const plaintext = 'Secret message';
     const correctPassphrase = 'correct-passphrase';
     const wrongPassphrase = 'wrong-passphrase';
@@ -83,10 +83,10 @@ async function runTests() {
     
     try {
       await decrypt(encrypted, wrongPassphrase);
-      throw new Error('Should have thrown InvalidPassphraseError');
+      throw new Error('Should have thrown CorruptedDataError');
     } catch (error) {
-      console.assert(error instanceof InvalidPassphraseError, 'Should throw InvalidPassphraseError');
-      console.assert(error.code === 'INVALID_PASSPHRASE', 'Error should have correct code');
+      console.assert(error instanceof CorruptedDataError, 'Should throw CorruptedDataError');
+      console.assert(error.code === 'CORRUPTED_DATA', 'Error should have correct code');
     }
   });
 
@@ -95,7 +95,7 @@ async function runTests() {
     const incompleteData = {
       ciphertext: 'test',
       iv: 'test',
-      // Missing salt, keyHash, version
+      // Missing salt
     };
     
     try {

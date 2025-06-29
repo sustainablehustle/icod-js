@@ -181,16 +181,11 @@ export async function decrypt(
     ensureWebCrypto();
 
     // Validate required fields
-    const requiredFields: (keyof EncryptedData)[] = ['ciphertext', 'iv', 'salt', 'keyHash', 'version'];
+    const requiredFields: (keyof EncryptedData)[] = ['ciphertext', 'iv', 'salt'];
     for (const field of requiredFields) {
       if (!encryptedData[field]) {
         throw new MissingFieldError(field);
       }
-    }
-
-    // Check version compatibility
-    if (encryptedData.version !== CURRENT_VERSION) {
-      throw new CorruptedDataError(`Unsupported version: ${encryptedData.version}`);
     }
 
     // Convert base64 strings to ArrayBuffers
