@@ -79,7 +79,7 @@ async function computeKeyHash(key: CryptoKey): Promise<string> {
  * @param storedKeyHash - The stored key hash to compare against
  * @returns True if the passphrase is correct
  */
-async function verifyPassphrase(
+export async function verifyPassphrase(
   passphrase: string,
   salt: ArrayBuffer,
   storedKeyHash: string
@@ -168,9 +168,8 @@ export async function encrypt(
  * @param options - Optional decryption options (must match encryption options)
  * @returns The decrypted plaintext
  * @throws {CryptoAPIUnavailableError} If Web Crypto API is not available
- * @throws {InvalidPassphraseError} If the passphrase is incorrect
  * @throws {MissingFieldError} If required fields are missing
- * @throws {CorruptedDataError} If the data appears corrupted
+ * @throws {CorruptedDataError} If the data appears corrupted or passphrase is incorrect
  * @throws {DecryptionFailedError} If decryption fails
  */
 export async function decrypt(
@@ -205,12 +204,6 @@ export async function decrypt(
       ciphertextBuffer = base64ToArrayBuffer(encryptedData.ciphertext);
     } catch (error) {
       throw new CorruptedDataError('Invalid base64 encoding');
-    }
-
-    // Verify passphrase before attempting decryption
-    const isValid = await verifyPassphrase(passphrase, saltBuffer, encryptedData.keyHash);
-    if (!isValid) {
-      throw new InvalidPassphraseError();
     }
 
     // Derive key from passphrase
@@ -262,3 +255,6 @@ export {
 
 // Export types
 export type { EncryptedData, EncryptionOptions } from './types';
+
+// Export utility function needed for verifyPassphrase
+export { base64ToArrayBuffer } from './crypto-utils';
