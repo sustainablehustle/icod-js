@@ -11,6 +11,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "prebuild": "rm -rf dist",
+    "prepare": "npm run build",
     "test": "npm run build && node test.js && node test-cli.js",
     "test:watch": "npm run build && node test.js --watch",
     "typecheck": "tsc --noEmit",
