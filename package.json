@@ -1,14 +1,17 @@
 {
   "name": "icod-js",
-  "version": "1.1.1",
-  "description": "Client-side encryption library using AES-GCM with passphrase-derived keys (PBKDF2)",
+  "version": "2.0.0",
+  "description": "Client-side encryption library: AES-GCM content encryption under passphrase-derived or raw keys, with RSA-OAEP key wrapping for envelope encryption",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "icod-restore": "bin/icod-restore.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "prebuild": "rm -rf dist",
-    "test": "npm run build && node test.js",
+    "test": "npm run build && node test.js && node test-cli.js",
     "test:watch": "npm run build && node test.js --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run typecheck && npm run test",
@@ -21,14 +24,16 @@
   "license": "BSL-1.1",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/slashequip/icod-js.git"
+    "url": "git+https://github.com/sustainablehustle/icod-js.git"
   },
   "bugs": {
-    "url": "https://github.com/slashequip/icod-js/issues"
+    "url": "https://github.com/sustainablehustle/icod-js/issues"
   },
-  "homepage": "https://github.com/slashequip/icod-js#readme",
+  "homepage": "https://github.com/sustainablehustle/icod-js#readme",
   "files": [
-    "dist"
+    "dist",
+    "bin",
+    "FORMAT.md"
   ],
   "engines": {
     "node": ">=22.0.0"

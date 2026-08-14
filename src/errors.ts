@@ -15,6 +15,13 @@ export class CryptoAPIUnavailableError extends IcodError {
   }
 }
 
+/**
+ * The supplied passphrase does not match the payload's `keyHash`.
+ *
+ * Distinct from `CorruptedDataError` on purpose: on a product whose worst failure
+ * mode is permanent data loss, telling someone who mistyped their password that
+ * their data looks tampered with is unacceptable. Nothing is wrong with the data.
+ */
 export class InvalidPassphraseError extends IcodError {
   constructor() {
     super(
@@ -25,6 +32,30 @@ export class InvalidPassphraseError extends IcodError {
   }
 }
 
+/**
+ * The supplied raw key does not match the payload's `keyHash`.
+ *
+ * The raw-key counterpart of `InvalidPassphraseError`. Kept separate because the two
+ * mean different things to the caller: a wrong passphrase is a human mistyping, while
+ * a wrong key is a bug, a stale tab, or the wrong vault's key in memory — and those
+ * want different copy and different handling.
+ */
+export class InvalidKeyError extends IcodError {
+  constructor() {
+    super(
+      'The provided key does not match this payload. The key hash verification failed.',
+      'INVALID_KEY'
+    );
+    this.name = 'InvalidKeyError';
+  }
+}
+
+/**
+ * The key was verified correct and the ciphertext still failed to authenticate.
+ *
+ * This is the real corruption path: the data is damaged or has been tampered with.
+ * Callers should alert, log, refuse to overwrite, and surface support contact.
+ */
 export class CorruptedDataError extends IcodError {
   constructor(details: string) {
     super(
@@ -59,5 +90,16 @@ export class EncryptionFailedError extends IcodError {
   constructor(details?: string) {
     super(`Encryption failed${details ? `: ${details}` : '.'}`, 'ENCRYPTION_FAILED');
     this.name = 'EncryptionFailedError';
+  }
+}
+
+/** An RSA-OAEP wrap or unwrap failed — a malformed key, or the wrong private key. */
+export class KeyWrapError extends IcodError {
+  constructor(details?: string) {
+    super(
+      `Key wrapping operation failed${details ? `: ${details}` : '.'}`,
+      'KEY_WRAP_FAILED'
+    );
+    this.name = 'KeyWrapError';
   }
 }
