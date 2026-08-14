@@ -1,4 +1,6 @@
 node_modules/
-dist/
+# dist/ is committed: consumers install this package straight from git, and hardened
+# projects run npm with ignore-scripts=true, so the prepare-time build never runs.
+# Rebuild with `npm run build` and commit the result alongside any src change.
 *.log
 .DS_Store
